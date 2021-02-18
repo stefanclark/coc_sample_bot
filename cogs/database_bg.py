@@ -1,12 +1,15 @@
-from datetime import datetime
-from discord.ext import tasks,commands
 from coc import utils
+from datetime import datetime
+from discord.ext import commands, tasks
 
 
 class DatabaseBackground(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.update.start()
+
+    def cog_unload(self):
+        self.update.cancel()
 
     @commands.command(name="add_user")
     async def add_user(self, ctx, player_tag):
@@ -18,13 +21,13 @@ class DatabaseBackground(commands.Cog):
         
     @tasks.loop(minutes=3.0)
     async def update(self):
-        """This method updates the database every 3 mintues"""
+        """This method updates the database every 3 minutes"""
         tags = self.bot.dbconn.get_players()
         tag_list = [tag[0] for tag in tags]
         async for player in self.bot.coc.get_players(tag_list):
             self.bot.dbconn.update_donation((datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                                              player.tag,
-                                             player.achievements_dict['Friend in Need'].value, ))
+                                             player.get_achievement("Friend in Need").value))
 
     @update.before_loop
     async def before_update(self):
