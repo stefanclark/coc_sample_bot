@@ -1,6 +1,7 @@
 # This is where you "hide" the sensitive files in case you plan on
 # posting your code online
 creds.py
+bot_database.db
 
 .idea
 venv_bot/
