@@ -1,10 +1,12 @@
 from discord.ext import commands
+import creds
 
-CLAN_TAG = "#ABC123"  # your clan tag
-WAR_REPORT_CHANNEL_ID = 123456789  # the ID of the channel you want attacks sent to
+CLAN_TAG = creds.clan_tag
+WAR_REPORT_CHANNEL_ID = creds.war_channel
 
 REPORT_STYLE = """
-{att.attacker.name} (No. {att.attacker.map_position}, TH{att.attacker.town_hall}) just {verb} {att.defender.name} (No. {att.defender.map_position}, TH{att.defender.town_hall}) for {att.stars} stars and {att.destruction}%.
+{att.attacker.name} (No. {att.attacker.map_position}, TH{att.attacker.town_hall}) just {verb} {att.defender.name} 
+(No. {att.defender.map_position}, TH{att.defender.town_hall}) for {att.stars} stars and {att.destruction}%.
 """
 
 
