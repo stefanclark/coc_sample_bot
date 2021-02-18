@@ -40,7 +40,7 @@ class BotDatabase:
         self.conn.commit()
         
     def get_players(self):
-        """Method gets all the regsitered users"""
+        """Method gets all the registered users"""
         sql = "SELECT coc_tag FROM coc_players"
         cur = self.conn.cursor()
         cur.execute(sql)
