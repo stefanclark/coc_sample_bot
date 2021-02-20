@@ -1,5 +1,7 @@
-from discord.ext import commands
+import coc
 import creds
+
+from discord.ext import commands
 
 CLAN_TAG = creds.clan_tag
 WAR_REPORT_CHANNEL_ID = creds.war_channel
@@ -18,7 +20,7 @@ class WarReporter(commands.Cog):
             self.on_war_attack,
             self.on_war_state_change
         )
-        self.bot.coc.add_war_update(CLAN_TAG)
+        self.bot.coc.add_war_updates(CLAN_TAG)
 
     def cog_unload(self):
         self.bot.coc.remove_events(
@@ -31,6 +33,7 @@ class WarReporter(commands.Cog):
     def report_channel(self):
         return self.bot.get_chanel(WAR_REPORT_CHANNEL_ID)
 
+    @coc.WarEvents.war_attack()
     async def on_war_attack(self, attack, war):
         if attack.attacker.is_opponenet:
             verb = "defended"
@@ -39,6 +42,7 @@ class WarReporter(commands.Cog):
 
         await self.report_channel.send(REPORT_STYLE.format(att=attack, verb=verb))
 
+    @coc.WarEvents.state()
     async def on_war_state_change(self, current_state, war):
         await self.report_channel.send("{0.clan.name} just entered {1} state!".format(war, current_state))
 
