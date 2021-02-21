@@ -31,11 +31,11 @@ class WarReporter(commands.Cog):
 
     @property
     def report_channel(self):
-        return self.bot.get_chanel(WAR_REPORT_CHANNEL_ID)
+        return self.bot.get_channel(WAR_REPORT_CHANNEL_ID)
 
     @coc.WarEvents.war_attack()
     async def on_war_attack(self, attack, war):
-        if attack.attacker.is_opponenet:
+        if attack.attacker.is_opponent:
             verb = "defended"
         else:
             verb = "attacked"
@@ -43,8 +43,8 @@ class WarReporter(commands.Cog):
         await self.report_channel.send(REPORT_STYLE.format(att=attack, verb=verb))
 
     @coc.WarEvents.state()
-    async def on_war_state_change(self, current_state, war):
-        await self.report_channel.send("{0.clan.name} just entered {1} state!".format(war, current_state))
+    async def on_war_state_change(self, old_war, new_war):
+        await self.report_channel.send("{0.clan.name} just entered {0.state} state with {0.opponent.name}!".format(new_war))
 
 
 def setup(bot):
